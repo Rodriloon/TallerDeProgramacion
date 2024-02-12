@@ -1,0 +1,166 @@
+programa ex7
+procesos
+  proceso juntarFyP(ES f: numero; ES p: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  proceso dejarFoP (ES f: numero; ES p: numero)
+  comenzar
+    si ((f > 0) & (p > 0))
+      depositarFlor
+      depositarPapel
+      f:= f - 1
+      p:= p - 1
+    sino  
+      si (f > 0)
+        depositarFlor
+        f:= f - 1
+      sino
+        si (p > 0)
+          depositarPapel
+          p:= p - 1 
+  fin
+  proceso recIda1 (ES f: numero; ES p: numero; E avI: numero)
+  comenzar
+    si (avI = 1)
+      derecha
+    sino
+      repetir 3
+        derecha
+    repetir 3
+      juntarFyP(f,p)
+      mover
+    juntarFyP(f,p)
+    BloquearEsquina(5,5)
+    mover
+    juntarFyP(f,p)
+    repetir 3
+      derecha
+    mover
+    LiberarEsquina(5,5)
+    repetir 3
+      juntarFyP(f,p)
+      mover
+    juntarFyP(f,p)
+    Informar(f)
+    Informar(p)
+  fin
+  proceso recIda2 (ES f: numero; ES p: numero; E avI: numero)
+  comenzar
+    si (avI = 13)
+      derecha
+    sino
+      repetir 3
+        derecha
+    repetir 4
+      juntarFyP(f,p)
+      mover
+    juntarFyP(f,p)
+    repetir 3
+      derecha
+    repetir 3 
+      juntarFyP(f,p)
+      mover
+    juntarFyP(f,p)
+    si (avI = 13)
+      BloquearEsquina(17,7)
+    sino
+      BloquearEsquina(13,3)
+    mover
+    juntarFyP(f,p)
+    Informar(f)
+    Informar(p)
+    repetir 2
+      derecha
+    dejarFoP(f,p)
+    mover
+    si (avI = 13)
+      LiberarEsquina(17,7)
+    sino
+      LiberarEsquina(13,3)
+  fin
+
+  proceso recVuelta1 (ES f: numero; ES p: numero; E avI: numero)
+  comenzar
+    repetir 2
+      derecha
+    repetir 3
+      dejarFoP(f,p)
+      mover
+    dejarFoP(f,p)
+    BloquearEsquina(5,5)
+    mover
+    dejarFoP(f,p)
+    si (avI = 9)
+      derecha
+    sino 
+      derecha
+    mover
+    LiberarEsquina(5,5)
+    repetir 3
+      dejarFoP(f,p)
+      mover
+    dejarFoP(f,p)
+  fin
+
+  proceso recVuelta2 (ES f: numero; ES p: numero; E avI: numero)
+  comenzar
+    repetir 3 
+      dejarFoP(f,p)
+      mover
+    dejarFoP(f,p)
+    si (avI = 13)
+      derecha
+    sino
+      derecha
+    repetir 4
+      dejarFoP(f,p)
+      mover
+    dejarFoP(f,p)
+  fin
+areas
+  a1: AreaPC(1,1, 9,9)
+  a2: AreaPC(13,3,17,7)
+robots
+  robot robot1
+  variables
+    avI, f, p: numero
+  comenzar
+    avI:= PosAv
+    f:= 0
+    p:= 0
+    recIda1(f,p,avI)
+    recVuelta1(f,p,avI)
+  fin
+
+  robot robot2
+  variables
+    avI, f, p: numero
+  comenzar
+    avI:= PosAv
+    f:= 0
+    p:= 0
+    recIda2(f,p,avI)
+    recVuelta2(f,p,avI)
+  fin
+
+variables
+  A1: robot1
+  A2: robot1
+  B1: robot2
+  B2: robot2
+comenzar
+  AsignarArea(A1, a1)
+  AsignarArea(A2, a1)
+  AsignarArea(B1, a2)
+  AsignarArea(B2, a2)
+  Iniciar(A1, 1,5)
+  Iniciar(A2, 9,5)
+  Iniciar(B1, 13,3)
+  Iniciar(B2, 17,7)
+fin

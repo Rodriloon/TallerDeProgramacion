@@ -1,0 +1,96 @@
+programa P4E2
+procesos
+  proceso juntarP(ES p: numero)
+  comenzar
+    mientras ((HayPapelEnLaEsquina) & (p < 5))
+      tomarPapel
+      p:= p + 1
+  fin
+  
+areas
+  A1: AreaP(5,1,5,100)
+  A2: AreaP(10,1,10,100)
+  AC: AreaC(50,50,50,50)
+  AI: AreaPC(11,1,12,1)
+robots
+  robot reco
+  variables
+    p, avI, caA: numero
+  comenzar
+    p:= 0
+    avI:= PosAv
+    mientras (PosCa <= 100)
+      caA:= PosCa
+      si ((HayPapelEnLaEsquina) & (p < 5))
+        juntarP(p)
+      sino
+        si (p = 5)
+          BloquearEsquina(50,50)
+          Pos(50,50)
+          repetir p
+            depositarPapel
+          Pos(avI,caA)
+          LiberarEsquina(50,50)
+          p:= 0
+        si ((caA < 100) & ~(HayPapelEnLaEsquina))
+          mover
+  fin
+
+  robot consu 
+  variables 
+    avI, p, papR, tot: numero
+  comenzar
+    avI:= PosAv
+    tot:= 0
+    p:= 0
+    mientras (tot <> 8)
+      Random(papR, 2,5)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      mientras ((HayPapelEnLaEsquina) & (p < papR))
+        tomarPapel
+        p:= p + 1
+      si (p < papR)
+        repetir p
+          depositarPapel
+          tot:= tot + 1
+          p:= 0
+      Pos(avI, 1)
+      LiberarEsquina(50,50)
+      mientras (p <> 0)
+        depositarPapel
+        p:= p - 1
+  fin
+variables
+  R1: reco
+  R2: reco
+  C1: consu
+  C2: consu
+comenzar
+  AsignarArea(R1, A1)
+  AsignarArea(R1, AC)
+  AsignarArea(R2, A2)
+  AsignarArea(R2, AC)
+  AsignarArea(C1, AI)
+  AsignarArea(C1, AC)
+  AsignarArea(C2, AI)
+  AsignarArea(C2, AC)
+  Iniciar(R1,5,1)
+  Iniciar(R2,10,1)
+  Iniciar(C1,11,1)
+  Iniciar(C2,12,1)
+fin
+{Existen dos robots productores que recorren las avenidas 5 y 10 respectivamente, juntando
+todos los papeles de su avenida. A lo largo del recorrido, cada vez que juntan 5 papeles, los
+depositan en la esquina (50,50).
+Ademas existen dos robots consumidores que intentan tomar una cantidad aleatoria de
+papeles (entre 2 y 5) de la esquina (50,50) para depositarla en su esquina de origen. Si la
+esquina (50,50) no posee la cantidad de papeles requerida, vuelven a su esquina de origen
+sin tomar ningun papel. Si luego de 8 intentos seguidos detectan que la esquina (50,50) no
+tiene papeles suficientes para juntar, entonces asumiran que los productores ya han
+completado su trabajo y por lo tanto terminaran su tarea tambien.
+Los consumidores inician en las esquinas (11,1) y (12,1) respectivamente
+}
+
+
+

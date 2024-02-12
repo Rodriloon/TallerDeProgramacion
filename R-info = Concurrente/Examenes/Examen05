@@ -1,0 +1,152 @@
+programa ex5
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  proceso juntarP (ES p: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  proceso recorrido (ES fop: numero; E caI: numero)
+  comenzar
+    repetir 9
+      si (caI = 3)
+        juntarF(fop)
+      sino
+        juntarP(fop)
+      mover
+    si (caI = 3)  
+      juntarF(fop)
+    sino
+      juntarP(fop)
+  fin
+  
+areas
+  C1: AreaPC(3,3,13,13)
+  C2: AreaPC(16,3,26,13)
+  AJ: AreaP(14,6,14,6)
+robots
+  robot florero
+  variables
+    caI, avI, f, id: numero
+  comenzar
+    BloquearEsquina(PosAv, 3)
+    RecibirMensaje(id, RJ)
+    f:= 0
+    caI:= PosCa
+    avI:= PosAv
+    juntarF(f)
+    mover
+    LiberarEsquina(avI, 3)
+    recorrido(f, caI)
+    derecha
+    recorrido(f, caI)
+    BloquearEsquina(PosAv + 1, PosCa)
+    mover
+    juntarF(f)
+    EnviarMensaje(id, RJ)
+    EnviarMensaje(f, RJ)
+  fin
+  robot papelero
+  variables
+    caI, avI, p, id: numero
+  comenzar
+    BloquearEsquina(PosAv, 13)
+    RecibirMensaje(id, RJ)
+    p:= 0
+    caI:= PosCa
+    avI:= PosAv
+    repetir 2
+      derecha
+    juntarP(p)
+    mover
+    LiberarEsquina(avI, 13)
+    recorrido(p, caI)
+    derecha
+    recorrido(p, caI)
+    BloquearEsquina(PosAv - 1, PosCa)
+    mover
+    juntarP(p)
+    EnviarMensaje(id, RJ)
+    EnviarMensaje(p, RJ)
+  fin
+  
+  robot jefesito
+  variables
+    id, id1, id2, id3, obj, fop: numero
+  comenzar
+    EnviarMensaje(1, F1)
+    EnviarMensaje(2, F2)
+    EnviarMensaje(3, P1)
+    EnviarMensaje(4, P2)
+    obj:= 0
+    repetir 4
+      RecibirMensaje(id, *)
+      si (id1 = 0)
+        id1:= id
+      sino
+        si (id2 = 0)
+          id2:= id
+        sino
+          si (id3 = 0)
+            id3:= id
+      si (id = 1)
+        RecibirMensaje(fop, F1)
+      sino
+        si (id = 2)
+          RecibirMensaje(fop, F2)
+        sino
+          si (id = 3)
+            RecibirMensaje(fop, P1)
+          sino
+            RecibirMensaje(fop, P2)
+      obj:= obj + fop
+    si (id = 1)
+      Informar(2) {2 = GANADORES LOS PAPELEROS}
+    sino
+      si (id = 2)
+        Informar(2)
+      sino
+        si (id = 3) 
+          Informar(1) {1 = GANADORES LOS FLOREROS}
+        sino
+          Informar(1) 
+    Informar(obj)
+  fin
+variables
+  F1: florero
+  F2: florero
+  P1: papelero
+  P2: papelero
+  RJ: jefesito 
+comenzar
+  AsignarArea(F1, C1)
+  AsignarArea(P1, C1)
+  AsignarArea(F2, C2)
+  AsignarArea(P2, C2)
+  AsignarArea(RJ, AJ)
+  Iniciar(F1, 3,3)
+  Iniciar(P1, 13,13)
+  Iniciar(F2, 16,3)
+  Iniciar(P2, 26,13)
+  Iniciar(RJ, 14,6)
+fin
+{
+ Existen dos equipos, papeleros y floreros, de dos rob0ts cada uno. El equipo papeleros solo juntan
+papeles, y el equipo floreros solo junta flores.
+ El juego consiste en realizar dos cuadrados, y cada cuadrado es realizado por un papelero y un
+florero de cada equipo, partiendo desde los vertices opuestos:
+- El primer cuadrado comprende el area entre las esquinas (3,3) y (13,13). El rob0t florero
+comienza en la esquina (3,3), y el robot papelero en la (13,13).
+- El primer cuadrado comprende el area entre las esquinas (16,3) y (26,13). El rob0t florero
+comienza en la esquina (16,3), y el robot papelero en la (26,13).
+ Al finalizar el juego, un rob0t fiscalizador debera informar que equipo finalizo primero, y la cantidad
+total de objetos (flores + papeles) juntados entre los dos equipos. El rob0t fiscalizador se ubica en
+la esquina (14,6).
+(imagen 5 chat juli)
+}

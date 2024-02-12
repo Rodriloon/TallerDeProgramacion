@@ -1,0 +1,120 @@
+programa P2E1
+procesos
+  proceso tomarF (ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  proceso recorrido(ES f: numero)
+  comenzar
+    repetir 9
+      tomarF(f)
+      mover
+    tomarF(f)
+  fin
+  
+areas
+  A1: AreaP(1,1,1,10)
+  A2: AreaP(2,11,2,20)
+  A3: AreaP(3,21,3,30)
+  A4: AreaP(4,31,4,40)
+  A5: AreaP(5,41,5,50)
+  A6: AreaP(6,51,6,60)
+  AF: AreaP(2,1,2,1)
+robots
+  robot roboto
+  variables
+    id, f: numero
+  comenzar
+    id:= PosAv
+    recorrido(f)
+    EnviarMensaje(id, RF)
+    EnviarMensaje(f, RF)
+  fin
+  
+  robot fizcal
+  variables
+    idM, id, fM, f: numero
+  comenzar
+    fM:= -1
+    idM:= -1
+    repetir 6
+      RecibirMensaje(id, *)
+      si (id = 1)
+        RecibirMensaje(f, R1)
+      sino
+        si (id = 2)
+          RecibirMensaje(f, R2)
+        sino
+          si (id = 3)
+            RecibirMensaje(f, R3)
+          sino
+            si (id = 4)
+              RecibirMensaje(f, R4)
+            sino
+              si (id = 5)
+                RecibirMensaje(f, R5)
+              sino
+                si (id = 6)
+                  RecibirMensaje(f, R6)
+      si (f > fM)
+        idM:= id
+        fM:= f
+    Informar(idM)
+    Informar(fM)
+  fin
+  
+variables
+  R1: roboto
+  R2: roboto
+  R3: roboto
+  R4: roboto
+  R5: roboto
+  R6: roboto
+  RF: fizcal
+comenzar
+  AsignarArea(R1, A1)
+  AsignarArea(R2, A2)
+  AsignarArea(R3, A3)
+  AsignarArea(R4, A4)
+  AsignarArea(R5, A5)
+  AsignarArea(R6, A6)
+  AsignarArea(RF, AF)
+  Iniciar(R1, 1,1)
+  Iniciar(R2, 2,11)
+  Iniciar(R3, 3,21)
+  Iniciar(R4, 4,31)
+  Iniciar(R5, 5,41)
+  Iniciar(R6, 6,51)
+  Iniciar(RF, 2,1)
+fin
+{
+Dos rob0ts compiten para ver cual junta mas flores. El primer rob0t recoge todas las
+flores de la avenida 1 entre las calles 1 y 10. El segundo rob0t recoge todas las
+flores de la avenida 2, entre las calles 11 y 20.
+Al finalizar el recorrido, el rob0t que recogido mayor cantidad de flores debe informar
+la diferencia de flores que obtuvo respecto al rob0t perdedor (el que obtuvo menos
+flores).
+Los rob0ts inician en las esquinas (1, 1) y (2, 11) respectivamente.
+
+b. Modifique el ejercicio anterior, considerando que ahora habra un rob0t fiscalizador,
+que sera responsable de informar la diferencia de flores que obtuvo el ganador con
+respecto al perdedor. El rob0t fiscalizador se ubica en la esquina (2,1)
+
+c. Modifique el ejercicio anterior para que ahora participen 6 rob0ts
+- Rob0t 1: Avenida 1, entre las calles 1 y 10
+- Rob0t 2: Avenida 2, entre las calles 11 y 20
+- Rob0t 3: Avenida 3, entre las calles 21 y 30
+- Rob0t 4: Avenida 4, entre las calles 31 y 40
+- Rob0t 5: Avenida 5, entre las calles 41 y 50
+- Rob0t 6: Avenida 6, entre las calles 51 y 60
+- Fiscalizador: Avenida 2, calle 1
+El fiscalizador debera informar la cantidad de flores que junto el rob0t ganador.
+
+d. Modifique el inciso anterior para que ahora el fiscalizador informe tambien, cual
+fue el rob0t ganador.
+}
+
+
+

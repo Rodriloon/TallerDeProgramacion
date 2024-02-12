@@ -1,0 +1,97 @@
+programa ex3
+procesos
+  proceso juntarFyP (ES f: numero; ES p: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+    mientras (HayPapelEnLaBolsa)
+      tomarPapel
+      p:= p + 1
+  fin
+  
+  
+areas
+  areaC: AreaPC(1,1,9,9)
+  aJ: AreaP(20,15,20,15)
+  aI: AreaPC(20,1,20,5)
+robots
+  robot robot1
+  variables
+    avI, caI, id, f, p: numero
+  comenzar
+    
+  fin
+  
+  robot robot2
+  variables
+    avI, caI, id, f, p: numero
+  comenzar
+    
+  fin
+
+  robot jefesito
+  variables
+    id, f, p, fM, pM: numero
+  comenzar
+    fM:= 0
+    pM:= 0
+    repetir 4
+      RecibirMensaje(id, *)
+      si (id = 1)
+        RecibirMensaje(f, R1)
+        RecibirMensaje(p, R2)
+      sino
+        si (id = 2)
+          RecibirMensaje(f, R2)
+          RecibirMensaje(p, R2)
+        sino
+          si (id = 3)
+            RecibirMensaje(f, R3)
+            RecibirMensaje(p, R3)
+          sino
+            RecibirMensaje(f, R4)
+            RecibirMensaje(p, R4)
+      fM:= fM + f
+      pM:= pM + p
+    Informar(fM)
+    Informar(pM)
+  fin
+variables
+  R1: robot1
+  R2: robot1
+  R3: robot2
+  R4: robot2
+  RJ: jefesito
+comenzar
+  AsignarArea(RJ, aJ)
+  AsignarArea(R1, areaC)
+  AsignarArea(R2, areaC)
+  AsignarArea(R3, areaC)
+  AsignarArea(R4, areaC)
+  AsignarArea(R1, aI)
+  AsignarArea(R2, aI)
+  AsignarArea(R3, aI)
+  AsignarArea(R4, aI)
+  Iniciar(RJ, 20,15)
+  Iniciar(R1, 20,1)
+  Iniciar(R2, 20,1)
+  Iniciar(R3, 20,3)
+  Iniciar(R4, 20,4)
+fin
+{
+ Cuatro rob0ts juntadores son coordinados por un rob0t jefe. Los cuatro deben 
+juntar todas las flores y papeles en el recorrido que le sea asignado. Los recorridos
+asignados para los rob0ts son:
+- (1,2) - (9,4); inicia en (20,1)
+- (1,6) - (9,8); inicia en (20,2) 
+- (2,1) - (4,9); inicia en (20,4) 
+- (6,1) - (8,9); inicia en (20,5)
+ Al finalizar su recorrido, cada rob0t le debe informar al jefe cuantas flores y papeles
+junto. El jefe (ubicado en 20,15) debera informar la cantidad de flores juntadas y 
+la cantidad de papeles juntados por los cuatro rob0ts.
+
+(imagen 3 chat juli)
+}
+
+

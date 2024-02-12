@@ -1,0 +1,174 @@
+programa ex1
+procesos
+  proceso juntarFyP
+  comenzar
+    mientras (HayFlorEnLaEsquina) 
+      tomarFlor
+      EnviarMensaje(1, RJ)
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      EnviarMensaje(1, RJ)
+  fin
+  proceso recorrido (E avI: numero; E caI: numero)
+  variables
+    avR, caR: numero
+  comenzar
+    Random(avR, 45,62)
+    Random(caR, 62,69)
+    BloquearEsquina(avR,caR)
+    Pos(avR,caR)
+    EnviarMensaje(id, RJ)
+    juntarFyP
+    EnviarMensaje(0, RJ) 
+    Pos(avI,caI)
+    LiberarEsquina(avR,caR)
+  fin
+  
+areas
+  AC: AreaPC(45,48,62,69)
+  AI: AreaPC(10,10,13,10)
+  AJ: AreaP(1,1,1,1)
+robots
+  robot jefesito
+  variables
+    id, idM, fypM, van: numero
+    num, fyp1, fyp2, fyp3, fyp4: numero 
+  comenzar
+    van:= 0
+    fyp1:= 0
+    fyp2:= 0
+    fyp3:= 0
+    fyp4:= 0
+    idM:= -1
+    fypM:= -1
+    EnviarMensaje(1, R1)
+    EnviarMensaje(2, R2)
+    EnviarMensaje(3, R3)
+    EnviarMensaje(4, R4)
+    mientras (van <> 5)
+      RecibirMensaje(id, *)
+      si (id = 1)
+        RecibirMensaje(num, R1)
+        mientras (num <> 0)
+          fyp1:= fyp1 + num
+          RecibirMensaje(num, R1)
+        EnviarMensaje(F, R1)
+      sino 
+        si (id = 2)
+          RecibirMensaje(num, R2)
+          mientras (num <> 0)
+            fyp2:= fyp2 + num
+            RecibirMensaje(num, R2)
+          EnviarMensaje(F, R2)
+        sino 
+          si (id = 3)
+            RecibirMensaje(num, R3)
+            mientras (num <> 0)
+              fyp3:= fyp3 + num
+              RecibirMensaje(num, R3)
+            EnviarMensaje(F, R3)
+          sino
+            RecibirMensaje(num, R4)
+            mientras (num <> 0)
+              fyp4:= fyp4 + num
+              RecibirMensaje(num, R4)
+            EnviarMensaje(F, R4)
+      van:= van + 1
+    EnviarMensaje(V, R1)
+    EnviarMensaje(V, R2)
+    EnviarMensaje(V, R3)
+    EnviarMensaje(V, R4)
+    si (fyp1 > fypM)
+      idM:= 1
+      fypM:= fyp1
+    si (fyp2 > fypM)
+      idM:= 2
+      fypM:= fyp2
+    si (fyp3 > fypM)
+      idM:= 3
+      fypM:= fyp3
+    si (fyp4 > fypM)
+      idM:= 4
+      fypM:= fyp4
+    si (idM = 1)
+      EnviarMensaje(V, R1)
+      EnviarMensaje(F, R2)
+      EnviarMensaje(F, R3)
+      EnviarMensaje(F, R4)
+    sino
+      si (idM = 2)
+        EnviarMensaje(F, R1)
+        EnviarMensaje(V, R2)
+        EnviarMensaje(F, R3)
+        EnviarMensaje(F, R4)
+      sino
+        si (idM = 3)
+          EnviarMensaje(F, R1)
+          EnviarMensaje(F, R2)
+          EnviarMensaje(V, R3)
+          EnviarMensaje(F, R4)
+        sino
+          EnviarMensaje(F, R1)
+          EnviarMensaje(F, R2)
+          EnviarMensaje(F, R3)
+          EnviarMensaje(V, R4)
+  fin
+  
+  robot recolector
+  variables
+    fyp: numero
+    avI, caI, id: numero
+    gano: boolean
+  comenzar
+    RecibirMensaje(id, RJ)
+    avI:= PosAv
+    caI:= PosCa
+    mientras (termino = F)
+      recorrido(avI, caI)
+      RecibirMensaje(termino, RJ)
+    EnviarMensaje(V, RJ)
+    RecibirMensaje(gano, RJ)
+    si (gano = V)
+      repetir fyp
+        si (HayFlorEnLaBolsa)
+          depositarFlor
+        sino
+          depositarPapel
+  fin
+variables
+  RJ: jefesito
+  R1: recolector
+  R2: recolector
+  R3: recolector
+  R4: recolector
+comenzar
+  AsignarArea(R1, AC)
+  AsignarArea(R2, AC)
+  AsignarArea(R3, AC)
+  AsignarArea(R4, AC)
+  AsignarArea(R1, AI)
+  AsignarArea(R2, AI)
+  AsignarArea(R3, AI)
+  AsignarArea(R4, AI)
+  AsignarArea(RJ, AJ)
+  Iniciar(RJ, 1,1)
+  Iniciar(R1, 10,10)
+  Iniciar(R2, 11,10)
+  Iniciar(R3, 12,10)
+  Iniciar(R4, 13,10)
+fin
+{
+ Existen 4 rob0ts recolectores y un reb0t jefe. Los recolectores deben juntar las flores y papeles de un area en
+comun, en cinco intentos. Para realizar esta tarea elijen una esquina al azar dentro del area, se posicionan y toman los 
+papeles y flores. Cada vez que juntan una flor o papel de esa esquina le avisan al jefe. Al terminar de juntar los papeles
+y flores vuelve a su esquina original.
+ El jefe va recibiendo los avisos de los rob0ts recolectores y cuando todos terminan les avisa quien junto mas papeles
+y flores. El rob0t recolector que mas junto debe depositarlos en su esquina original.
+ Notas:
+ El area comun esta delimitada por las esquinas inferior izquierda (45,48) y la superior derecha (62,69).
+ El rob0t recolector1 se posiciona inicialmente en la esquina (10,10)
+ El rob0t recolector2 se posiciona inicialmente en la esquina (11,10)
+ El rob0t recolector3 se posiciona inicialmente en la esquina (12,10)
+ El rob0t recolector4 se posiciona inicialmente en la esquina (13,10)
+ El rob0t jefe se posiciona inicialmente en la esquina (1,1)
+}

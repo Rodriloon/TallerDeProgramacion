@@ -1,0 +1,138 @@
+programa P3E6
+procesos
+  proceso valor (ES k: numero; ES tamaño: numero)
+  comenzar
+    si (PosAv = 2)
+      k:= 1
+      tamaño:= 6
+    sino
+      si (PosAv = 5)
+        k:= 2
+        tamaño:= 10
+      sino
+        k:= 3
+        tamaño:= 7
+  fin
+  proceso cuadrante (ES tamaño: numero; ES fyp: numero)
+  variables
+    k: numero
+  comenzar
+    valor(k, tamaño)
+    repetir 4
+      repetir tamaño
+        si (k = 1)
+          mientras (HayFlorEnLaEsquina)
+            tomarFlor
+            fyp:= fyp + 1
+        sino
+          si (k = 2)
+            mientras (HayFlorEnLaEsquina)
+              tomarFlor
+              fyp:= fyp + 1
+            mientras (HayPapelEnLaEsquina)
+              tomarPapel
+              fyp:= fyp + 1
+          sino
+            mientras (HayPapelEnLaEsquina)
+              tomarPapel
+              fyp:= fyp + 1
+        mover
+      derecha
+  fin
+
+areas
+  AF: AreaP(1,1,1,1)
+  A1: AreaPC(2,2,8,8)
+  A2: AreaP(5,9,8,15)
+  A2b: AreaP(9,5,15, 8)
+  A3: AreaPC(9,9,16,16)
+  A4: AreaPC(1,20,1,22)
+robots
+  robot roboto
+  variables
+    id, tamaño, fyp: numero
+    ca: numero
+  comenzar
+    fyp:= 0
+    RecibirMensaje(id, RF)
+    cuadrante(tamaño, fyp)
+    EnviarMensaje(id, RF)
+    RecibirMensaje(ca, RF)
+    Pos(1,ca)
+    derecha
+    mientras ((fyp > 0) & (PosAv < 100))
+      si (HayFlorEnLaBolsa)
+        depositarFlor
+      si (HayPapelEnLaBolsa)
+        depositarPapel
+      mover
+    si (PosAv = 100)
+      si (HayFlorEnLaBolsa)
+        depositarFlor
+      si (HayPapelEnLaBolsa)
+        depositarPapel
+  fin
+  
+  robot jefesito
+  variables
+    ca: numero
+    id: numero
+  comenzar
+    EnviarMensaje(1, R1)
+    EnviarMensaje(2, R2)
+    EnviarMensaje(3, R3)
+    ca:= 20
+    repetir 3
+      RecibirMensaje(id, *)
+      si (id = 1)
+        EnviarMensaje(ca, R1)
+      sino
+        si (id = 2)
+          EnviarMensaje(ca, R2)
+        sino
+          EnviarMensaje(ca,R3)
+      ca:= ca + 1
+  fin
+variables
+  RF: jefesito
+  R1: roboto
+  R2: roboto
+  R3: roboto
+comenzar
+  AsignarArea(RF, AF)
+  AsignarArea(R1, A1)
+  AsignarArea(R2, A1)
+  AsignarArea(R2, A2)
+  AsignarArea(R2, A2b)
+  AsignarArea(R2, A3)
+  AsignarArea(R3, A3)
+  AsignarArea(R1, A4)
+  AsignarArea(R2, A4)
+  AsignarArea(R3, A4)
+  Iniciar(RF, 1,1)
+  Iniciar(R1, 2,2)
+  Iniciar(R2, 5,5)
+  Iniciar(R3, 9,9)
+fin
+{
+Tres robots deben recorrer el perametro de su cuadrante, como se indica a
+continuacion:
+- El robot 1 comienza la esquina (2,2) y debe realizar un cuadrante de 6x6 juntando
+todas las flores que encuentre
+- El robot 2 comienza en la esquina (5,5) y debe realizar un cuadrante de 10x10
+juntando todas las flores y los papeles que encuentre
+- El robot 3 comienza en la esquina (9,9) y debe realizar un cuadrante de 7x7 juntando
+todos los papeles que encuentre
+
+Cada robot que finalice su cuadrante debera avisar al robot fiscalizador. Al recibir el aviso, el
+robot fiscalizador indicara inmediatamente una calle a la que debera dirigirse el robot
+recolector, considerando que el robot que finalizo primero ira a la calle 20, el segundo a la
+21 y el tercero a la 22.
+
+Cuando los robots recolectores reciben un numero de calle, deberan posicionarse en la
+avenida 1 de dicha calle, y avanzar a lo largo de la calle depositando en cada esquina un
+papel, una flor o ambos, segun lo que cada robot haya juntado. El recorrido finalizara al
+completar la calle o vaciarse las bolsas.
+}
+
+

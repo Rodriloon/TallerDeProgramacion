@@ -1,0 +1,115 @@
+programa P3E5
+procesos
+  proceso esquina(E av: numero; E ca: numero; ES hay: boolean)
+  comenzar
+    BloquearEsquina(11,11)
+    Pos(11,11)
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+    sino
+      hay:= F
+    Pos(av,ca)
+    LiberarEsquina(11,11)
+  fin
+  proceso recorrido
+  variables
+    av, ca: numero
+    hay: boolean
+  comenzar
+    hay:= V
+    av:= PosAv
+    ca:= PosCa
+    esquina(av,ca,hay)
+    mientras ((hay = V) & (PosCa < 100))
+      depositarFlor
+      mover
+      ca:= PosCa
+      esquina(av,ca,hay)
+    si (PosCa = 100)
+      depositarFlor
+  fin
+areas
+  AJ: AreaP(1,1,1,1)
+  AP: AreaPC(11,11,11,11)
+  A1: AreaP(4,1,4,100)
+  A2: AreaP(6,1,6,100)
+  A3: AreaP(8,1,8,100)
+  A4: AreaP(10,1,10,100)
+robots
+  robot roboto
+  variables
+    id, ca: numero
+  comenzar
+    si (PosAv = 4)
+      id:= 1
+    sino
+      si (PosAv = 6)
+        id:= 2
+      sino
+        si (PosAv = 8)
+          id:= 3
+        sino
+          id:= 4
+    recorrido
+    EnviarMensaje(id, RJ)
+    ca:= PosCa
+    EnviarMensaje(ca, RJ)
+  fin
+
+  robot jefesito
+  variables
+    idA, idM, caA, caM: numero
+  comenzar
+    idM:= -1
+    caM:= 0
+    repetir 4
+      RecibirMensaje(idA,*)
+      si (idA = 1)
+        RecibirMensaje(caA,R1)
+      sino
+        si (idA = 2)
+          RecibirMensaje(caA,R2)
+        sino
+          si (idA = 3)
+            RecibirMensaje(caA,R3)
+          sino
+            RecibirMensaje(caA,R4)
+      si (caA > caM)
+        idM:= idA
+        caM:= caA
+    Informar(idM)
+  fin
+
+variables
+  RJ: jefesito
+  R1: roboto
+  R2: roboto
+  R3: roboto
+  R4: roboto
+comenzar
+  AsignarArea(RJ, AJ)
+  AsignarArea(R1, AP)
+  AsignarArea(R1, A1)
+  AsignarArea(R2, AP)
+  AsignarArea(R2, A2)
+  AsignarArea(R3, AP)
+  AsignarArea(R3, A3)
+  AsignarArea(R4, AP)
+  AsignarArea(R4, A4)
+  Iniciar(RJ, 1,1)
+  Iniciar(R1, 4,1)
+  Iniciar(R2, 6,1)
+  Iniciar(R3, 8,1)
+  Iniciar(R4, 10,1)
+fin
+{
+Realice un programa en el que 4 robots juegan una carrera por avenidas diferentes: 4, 6,
+8 y 10 respectivamente. Todos los robots inician en la calle 1.
+Para poder avanzar, cada robot debe juntar un papel de una fuente de papeles localizada
+en la esquina (11,11), colocarlo en la esquina actual de su avenida y avanzar un paso.
+Cuando la esquina fuente ya no tiene mas papeles, o cuando se haya completado la
+avenida, deberan avisar al robot coordinador y este determinara el robot que llego mas
+lejos.
+}
+
+

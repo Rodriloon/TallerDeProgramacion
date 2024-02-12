@@ -1,0 +1,26 @@
+programa P2E4
+procesos
+
+areas
+
+robots
+
+variables
+
+comenzar
+
+fin
+{
+Realice un pr0grama en el que un rob0t fiscalizador controla el acceso de 4 rob0ts
+recolectores al cuadrante encerrado entre las esquinas (25,25) y (75,75) . Para ello, el
+rob0t fiscalizador avisa a un rob0t recolector aleatorio que puede ingresar al area. El
+rob0t que recibe la autorizacion de acceso calcula una esquina aleatoria dentro del
+area, limpia dicha esquina de flores y papeles, regresa a su esquina y avisa al rob0t
+fiscalizador que ya finalizo.
+Se realizaran en total 10 accesos al cuadrante entre los 4 rob0ts recolectores. Al
+finalizar, el rob0t fiscalizador debera indicar al rob0t ganador que se posicione en la
+esquina (50,50).
+El rob0t fiscalizador inicia en la esquina (1,1) y los rob0ts recolectores inician en las
+esquinas (25,1) (30,1) (35,1) y (40,1) respectivamente.
+}
+

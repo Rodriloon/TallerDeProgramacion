@@ -1,0 +1,93 @@
+programa P1E2
+procesos
+  proceso tomarP (ES p : numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  
+  proceso recorrido
+  variables
+    p: numero
+  comenzar
+    repetir 20
+      tomarP(p)
+      mover
+    tomarP(p)
+    Informar(p)
+  fin
+  
+areas
+  area1: AreaPC(10, 10, 29, 10)
+  area2: AreaPC(10, 11, 10, 30)
+  area3: AreaPC(11, 30, 30, 30)
+  area4: AreaPC(30, 10, 30, 29) 
+
+robots
+  robot tipo1
+  comenzar
+    recorrido
+  fin
+  
+  robot tipo2
+  comenzar
+    derecha
+    recorrido
+  fin
+   
+  robot tipo3
+  comenzar
+    repetir 2
+      derecha
+    recorrido
+  fin
+   
+  robot tipo4
+  comenzar
+    repetir 3
+      derecha
+    recorrido
+  fin
+  
+variables
+  R1: tipo1
+  R2: tipo2
+  R3: tipo3
+  R4: tipo4
+comenzar
+  AsignarArea(R1, area1)
+  AsignarArea(R3, area1)
+  AsignarArea(R4, area1)
+  AsignarArea(R1, area2)
+  AsignarArea(R2, area2)
+  AsignarArea(R4, area2)
+  AsignarArea(R1, area3)
+  AsignarArea(R2, area3)
+  AsignarArea(R3, area3)
+  AsignarArea(R2, area4)
+  AsignarArea(R3, area4)
+  AsignarArea(R4, area4)
+  Iniciar(R1, 10, 10)
+  Iniciar(R2, 10, 30)
+  Iniciar(R3, 30, 30)
+  Iniciar(R4, 30, 10)
+fin
+
+{
+Realice un programa en el que 4 robots limpien de papeles el perametro de un cuadrado
+de lado 20 en sentido horario, como se muestra en la figura:
+El vertice inferior izquierdo del cuadrado se ubica en la esquina (10,10).
+Al finalizar, cada robot debe informar la cantidad de papeles juntados en su lado.
+}
+
+
+
+
+
+
+
+
+
+
+

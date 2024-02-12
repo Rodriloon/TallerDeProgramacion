@@ -1,0 +1,35 @@
+programa ex8
+procesos
+
+areas
+
+robots
+
+variables
+
+comenzar
+  AsignarArea()
+  Iniciar()
+fin
+{
+Dos equipos, de dos robots cada uno, juegan una competencia.
+En cada equipo hay un robot recolector y un robot depositador. El robot recolector
+debe juntar un objeto de la fuente del equipo y dejarlo en la base del campo de juego,
+luego el depositador toma el objeto de la base y lo deposita en una esquina de su calle
+asignada, asi hasta completar el recorrido.
+Un equipo jugara con flores y el otro con papeles. Suponga que existen suficientes
+objetos en las fuentes de cada equipo y que la base del campo de juego se encuentra
+vacia inicialmente.
+Un robot fiscalizador es el encargado de informar que equipo gano el juego (es decir,
+el primer equipo que le aviso que completo su calle con los objetos correspondientes).
+2. Realice un programa con 2 equipos de 2 robots y un fiscalizador.
+Cada equipo debe hacer el recorrido de "L" (de 15x10). En cada equipo un robot
+recorre la arista vertical juntando flores, y el otro la horizontal juntando papeles.
+El fiscalizador debe informar el equipo ganador (el equipo que junto mas objetos).
+El equipo1 inicia su "L" en la esquina (5,5) y el equipo2 en la esquina (25,5).
+Los robots del equipo 1 inician en las esquinas (2,1) y (3,1)
+Los robots del equipo 2 inician en las esquinas (4,1) y (5,1)
+El Fiscalizador inicia en (1,1).
+}
+
+

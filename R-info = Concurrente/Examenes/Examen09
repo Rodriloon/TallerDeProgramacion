@@ -1,0 +1,124 @@
+programa ex9
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  proceso juntarP (ES p: numero)
+  comenzar
+    si (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  proceso dejarF (ES f: numero)
+  variables
+    av, ca: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    BloquearEsquina(21,13)
+    Pos(21,13)
+    depositarFlor
+    f:= f - 1
+    Pos(av,ca)
+    LiberarEsquina(21,13)
+  fin
+  proceso dejarP (ES p: numero)
+  variables
+    av,ca: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    BloquearEsquina(9,13)
+    Pos(9,13)
+    depositarPapel
+    p:= p - 1
+    Pos(av,ca)
+    LiberarEsquina(9,13)
+  fin
+areas
+  
+robots
+  robot jefesito
+  variables
+    
+  comenzar
+    
+  fin
+
+  robot roboto
+  variables
+    avI, caI, f, p, ca, id: numero
+    final: boolean
+  comenzar
+    avI:= PosAv
+    caI:= PosCa
+    mientras (HayFlorEnLaBolsa) 
+      depositarFlor
+    mientras (HayPapelEnLaBolsa)
+      depositarPapel
+    RecibirMensaje(id, RF)
+    RecibirMensaje(ca, RF)
+    Pos(10,ca)
+    repetir 9
+      juntarF(f)
+      mover
+    juntarF(f)
+    mientras (f <> 0)
+      dejarF(f)
+    EnviarMensaje(id, RF)
+    RecibirMensaje(final, RF)
+    si (final = V)
+      RecibirMensaje(ca, RF)
+  fin
+variables
+  R1: roboto
+  R2: roboto
+  R3: roboto
+  R4: roboto
+  RF: jefesito
+comenzar
+  AsignarArea()
+  Iniciar(R1, 1,1)
+  Iniciar(R2, 2,2)
+  Iniciar(R3, 3,3)
+  Iniciar(R4, 4,4)
+  Iniciar(RF, 5,5)
+fin
+{
+Cuatro robots deben jugar una carrera en dos etapas (clasificacion y final). Los robots
+comienzan en (1,1), (2,2), (3,3) y (4,4), esquinas en donde aprovechan a vaciar sus bolsas (que
+podrian estar llenas de flores y papeles). Al finalizar la carrera, los cuatro robots deben volver a
+su esquina de inicio.
+La primera etapa de la carrera (la clasificacion) va desde la avenida 10 hasta la avenida 20,
+cada uno de los robots hara el recorrido sobre una calle distinta (calles 10, 12, 14 y 16) y
+consiste en lo siguiente:
+1. Todos los robots deben comenzar al mismo tiempo recorriendo la calle que le fuera
+asignada desde la avenida 10 hasta la avenida 20 juntando solo una flor por esquina (si
+hubiera).
+2. Al llegar al final del recorrido deberan dejar todas las flores juntadas en (21,13). Las
+flores deben ser depositadas de a una, es decir, se posicionan en (21,13), dejan una
+flor y luego se abandona la esquina, repitiendo este procedimiento hasta depositar
+todas las flores que junto durante su recorrido.
+3. Los dos robots que vacien primero su bolsa pasan a la final.
+La segunda etapa de la carrera (la final) va desde la avenida 20 hasta la avenida 10 y cada uno
+de los dos robots finalistas hara el recorrido sobre una calle distinta (calles 11 y 15) y consiste
+en lo siguiente:
+1. Ambos finalistas deben comenzar al mismo tiempo recorriendo su calle desde avenida
+20 hasta avenida 10 juntando solo un papel por esquina (si hubiera).
+2. Al llegar al final de la calle deberan dejar todos los papeles juntados en (9,13). Los
+papeles deben ser depositados de a uno, al igual que en la primer etapa.
+3. El robot que vacie primero su bolsa es el ganador
+La distribucion de las calles, el comienzo de la carrera, la determinacion de los finalistas, el
+comienzo de la segunda etapa y el informar quien es el robot ganador son tareas de un quinto
+robot fiscalizador que estara ubicado en (5,5).
+}
+
+
+
+
+
+
+

@@ -1,0 +1,156 @@
+programa ex11
+procesos
+  proceso juntarFoP (ES f: numero; ES p: numero; ES hay: boolean; ES term: boolean)
+  comenzar
+    si ((HayFlorEnLaEsquina) & (HayPapelEnLaEsquina))
+      tomarFlor
+      f:= f + 1
+      tomarPapel
+      p:= p + 1
+    sino
+      si (HayFlorEnLaEsquina)
+        tomarFlor
+        f:= f + 1
+      sino
+        si (HayPapelEnLaEsquina)
+          tomarPapel
+          p:= p + 1
+        sino
+          hay:= F
+    si ((HayFlorEnLaEsquina) | (HayPapelEnLaEsquina))
+      term:= F
+    sino
+      term:= V
+  fin
+  proceso av10 (ES f: numero; ES p: numero) 
+  comenzar
+    Pos(10,10)
+    mientras (((p <> 0) & (f <> 0)) & (PosCa < 98))
+      depositarFlor
+      f:= f - 1
+      mover
+      depositarPapel
+      p:= p - 1
+      mover
+    si ((p <> 0) & (f <> 0))
+      depositarFlor
+      f:= f - 1
+      mover
+      depositarPapel
+      p:= p - 1
+  fin
+
+areas
+  A1: AreaP(1,1,1,1)
+  A2: AreaP(2,2,2,2)
+  A3: AreaP(3,3,3,3)
+  A4: AreaP(4,4,4,4)
+  AC: AreaPC(5,5,5,5)
+  A10: AreaPC(10,10,10,100)
+robots
+  robot roboto
+  variables
+    id, f, p, obj: numero
+    avI, caI: numero
+    hay, gano, term: boolean
+  comenzar
+    hay:= V
+    term:= F
+    f:= 0
+    p:= 0
+    avI:= PosAv
+    caI:= PosCa
+    RecibirMensaje(id, RC)
+    mientras (hay = V)
+      BloquearEsquina(5,5)
+      Pos(5,5)
+      juntarFoP(f,p,hay,term)
+      si (term = V) 
+        EnviarMensaje(id, RC)
+      Pos(avI,caI)
+      LiberarEsquina(5,5)
+    RecibirMensaje(gano, RC)
+    si (gano = V) 
+      av10(f,p)
+    obj:= f + p
+    EnviarMensaje(id, RC)
+    EnviarMensaje(obj, RC)
+  fin
+
+  robot jefesito
+  variables
+    id1, id, idM, obj, objM: numero
+  comenzar
+    id1:= 0
+    idM:= 0
+    objM:= -1
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,R3)
+    repetir 3
+      RecibirMensaje(id, *)
+      si (id1 = 0)
+        id1:= id
+    si (id1 = 1)
+      EnviarMensaje(V, R1)
+      EnviarMensaje(F, R2)
+      EnviarMensaje(F, R2)
+    sino
+      si (id1 = 2)
+        EnviarMensaje(F, R1)
+        EnviarMensaje(V, R2)
+        EnviarMensaje(F, R3)
+      sino
+        EnviarMensaje(F, R1)
+        EnviarMensaje(F, R2)
+        EnviarMensaje(V, R3)
+    repetir 3
+      RecibirMensaje(id, *)
+      si (id = 1)
+        RecibirMensaje(obj, R1)
+      sino
+        si (id = 2)
+          RecibirMensaje(obj, R2)
+        sino
+          RecibirMensaje(obj, R3)
+      si (obj > objM)
+        idM:= id
+        objM:= obj
+    Informar(idM)
+  fin
+variables
+  R1: roboto
+  R2: roboto
+  R3: roboto
+  RC: jefesito
+comenzar
+  AsignarArea(RC, A1)
+  AsignarArea(R1, A2)
+  AsignarArea(R2, A3)
+  AsignarArea(R3, A4)
+  AsignarArea(R1, AC)
+  AsignarArea(R2, AC)
+  AsignarArea(R3, AC)
+  AsignarArea(R1, A10)
+  AsignarArea(R2, A10)
+  AsignarArea(R3, A10)
+  Iniciar(R1, 2,2)
+  Iniciar(R2, 3,3)
+  Iniciar(R3, 4,4)
+  Iniciar(RC, 1,1)
+fin
+{
+Existe una fuente de flores y papeles en la esquina (5,5).
+Ademas, existen 3 robots que deben tomar una flor y un papel de ser posible (en el caso de
+que haya solo un tipo de objeto debe tomarlo). El robot que toma el ultimo objeto debe
+pararse en la esquina (10,10) y recorrer la avenida 10 desde la calle 10 depositando en cada
+esquina un objeto juntado alternadamente. Ademas, existe un coordinador que debe informar
+el robot que mas objetos junto en total.
+Notas:
+-· Los robots se encuentran inicialmente en la esquina (2,2), (3,3) y (4,4).
+-· Los robots toman dos objetos como maximo cada vez que van a la esquina (5,5).
+-· Si al robot que debe hacer el recorrido se le acaba algun objeto entonces debe detenerse
+}
+
+
+

@@ -1,0 +1,194 @@
+programa ex4
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  proceso rectangulo (E a: numero; E v: numero; ES f: numero; E avI: numero)
+  comenzar
+    si ((avI = 2) | (avI = 3))
+      Pos(v, 10)
+    sino 
+      Pos(v, 30) 
+    si ((avI = 2) | (avI = 4))
+      repetir 2
+        repetir 15
+          juntarF(f)
+          mover
+        juntarF(f)
+        derecha
+        repetir a
+          juntarF(f)
+          mover
+        juntarF(f)
+        derecha
+    sino
+      repetir 2
+        repetir 15
+          depositarFlor
+          mover
+        depositarFlor
+        derecha
+        repetir a
+          depositarFlor
+          mover
+        depositarFlor
+        derecha
+  fin 
+  proceso depositacion (ES f: numero; E avI: numero)
+  variables
+    avF, caF: numero
+  comenzar
+    avF:= PosAv
+    caF:= PosCa
+    si (avI = 2)
+      mientras (f <> 0)
+        Pos(5,15)
+        depositarFlor
+        f:= f - 1
+        Pos(avF,caF)
+    sino
+      mientras (f <> 0)
+        Pos(5,40)
+        depositarFlor
+        f:= f - 1
+        Pos(avF,caF)
+  fin
+  proceso juntacion (ES f: numero; E avI: numero; ES hay: boolean)
+  comenzar
+    si (avI = 3)
+      Pos(5,15)
+    sino
+      Pos(5,40)
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+    sino
+      hay:= F
+    Pos(avI, avI)
+  fin
+areas 
+  AI: AreaC(1,1,5,5)
+  a1: AreaPC(1,10,100,25)
+  a2: AreaPC(1,30,100,45)
+robots
+  robot jefesito
+  variables
+    a, v, id: numero 
+  comenzar
+    Random(a, 1,5)
+    Random(v, 1,95)
+    EnviarMensaje(a, A1)
+    EnviarMensaje(v, A1)
+    EnviarMensaje(a, A2)
+    EnviarMensaje(v, A2)
+    EnviarMensaje(a, B1)
+    EnviarMensaje(v, B1)
+    EnviarMensaje(a, B2)
+    EnviarMensaje(v, B2)
+    EnviarMensaje(1, A2)
+    EnviarMensaje(2, B2)
+    repetir 2
+      RecibirMensaje(id, *)
+    si (id = 1)
+      Informar(2) {GANO EQUIPO 2}
+    sino
+      Informar(1) {GANO EQUIPO 1}
+  fin
+
+  robot roboto1
+  variables
+    avI, caI, f: numero
+    a, v: numero
+  comenzar
+    avI:= PosAv
+    caI:= PosCa
+    f:= 0
+    RecibirMensaje(a, RJ)
+    RecibirMensaje(v, RJ)
+    rectangulo(a,v,f,avI)
+    depositacion(f,avI)
+    Pos(avI,caI)
+    si (avI = 2)
+      EnviarMensaje(V, A2)
+    sino
+      EnviarMensaje(V, B2)
+  fin
+  robot roboto2
+  variables
+    avI, caI, f: numero
+    a, v, id: numero
+    posta, hay: boolean
+  comenzar
+    avI:= PosAv
+    caI:= PosCa
+    f:= 0
+    hay:= V
+    RecibirMensaje(a, RJ)
+    RecibirMensaje(v, RJ)
+    RecibirMensaje(id, RJ)
+    si (avI = 3)
+      RecibirMensaje(posta, A1)
+    sino
+      RecibirMensaje(posta, B1)
+    mientras (hay = V)
+      juntacion(f,avI,hay)
+    rectangulo(a,v,f,avI)
+    Pos(avI,caI)
+    EnviarMensaje(id, RJ)
+  fin
+variables
+  RJ: jefesito
+  A1: roboto1
+  A2: roboto2
+  B1: roboto1
+  B2: roboto2
+comenzar
+  AsignarArea(RJ, AI)
+  AsignarArea(A1, AI)
+  AsignarArea(A1, a1)
+  AsignarArea(A2, AI)
+  AsignarArea(A2, a1)
+  AsignarArea(B1, AI)
+  AsignarArea(B1, a2)
+  AsignarArea(B2, AI)
+  AsignarArea(B2, a2)
+  Iniciar(RJ, 1,1)
+  Iniciar(A1, 2,2)
+  Iniciar(A2, 3,3)
+  Iniciar(B1, 4,4)
+  Iniciar(B2, 5,5)
+fin
+{
+ Dos equipos de dos rob0ts cada uno deben compretir entre si. Un equipo jugara dentro
+ del area (1,10) - (100,25), mientras que el otro haran lo mismo dentro del area
+ (1,30) - (100,45). Un quinto rob0t fizcalizador sera el encargado de com3nzar con la
+ competencia e informar que equipo es el ganador.
+ La competencia consiste en lo siguiente: 
+1. El fiscalizador elige un num3ro al azar del 1 al 5. Ese num3ro sera el ancho "A"
+del rectangulo que deberan recorrer ambos equipos.
+2. El fiscalizador elige un num3ro al azar del 1 al 95. ese num3ro sera la avenida 
+"V" donde comienzan los rectangulos de ambos equipos.
+3. El fiscalizador le informa los valores a ambos equipos para que un equipo
+recorra un rectangulo de "A" de ancho y 15 de alto comenzando en la esquina
+("V",10), mientras que el otro equipo haran un rectangulo de las mismas 
+dimensiones pero comenzando en ("V",30).
+4. Ante el avisoo del fiscalizador, UN rob0t por equipo comienza con la 
+competencia recorriendo el perimetro de su rectangulo juntando todas las
+flores que encuentra en todas las esquinas. Al finalizar el recorrido deberan
+dejar todas las flores juntadas en la esquina (5,15) para un equipo y (5,40) 
+para el otro, las flores deberan ser dejadas de a una. Al finalizar de vaciar su 
+bolsa deberan volver a su esquina de inicio y pasarle la posta a su compañero de equipo.
+5. El otro rob0t debera juntar de (5,15) o (5,40) segun le corresponda todas las
+flores (de a una) dejada por su compañero y depositar una flor en cada esquina 
+del perimetro de su rectangulo asignado (asuma que junta tantas flores como 
+esquinas deba recorrer). Finalizado el perimetro debera volver a su esquina de
+inicio finalizando asi su recorrido.
+6. El primer equipo que complete todo el recorrido es el ganador. El fiscalizador 
+debera informar el equipo ganador.
+ 
+ Los 5 rob0ts comienzan en (1,1) ; (2,2) ; (3,3) ; (4,4) y (5,5).
+(imagen 4 chat juli)
+}

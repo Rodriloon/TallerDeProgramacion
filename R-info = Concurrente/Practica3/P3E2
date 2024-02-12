@@ -1,0 +1,127 @@
+programa P3E2
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:= f + 1
+  fin
+  proceso juntarP (ES p: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:= p + 1
+  fin
+  
+areas
+  A1: AreaP(1,1,14,100 )
+  A2: AreaP(16,1,31,100)
+  AC: AreaPC(15,15,15,15)
+  AJ: AreaP(15,1,15,1)
+robots
+  robot florero
+  variables
+    f, tamaño: numero
+  comenzar
+    f:= 0
+    tamaño:= 5
+    repetir 5
+      repetir tamaño
+        juntarF(f)
+        mover
+      derecha
+      repetir tamaño
+        juntarF(f)
+        mover
+      repetir 3
+        derecha
+      tamaño:= tamaño - 1
+    EnviarMensaje(1, RJ)
+    repetir 2
+      derecha
+    mover
+    tamaño:= 2
+
+    repetir 4
+      repetir tamaño
+        juntarF(f)
+        mover
+      derecha
+      repetir tamaño
+        juntarF(f)
+        mover
+      repetir 3
+        derecha
+      tamaño:= tamaño + 1
+    Informar(f)
+  fin
+  robot papelero
+  variables
+    p, tamaño: numero
+  comenzar
+    p:= 0
+    tamaño:= 5
+    repetir 5
+      repetir tamaño
+        juntarP(p)
+        mover
+      repetir 3
+        derecha
+      repetir tamaño
+        juntarP(p)
+        mover
+        derecha
+      tamaño:= tamaño - 1
+    EnviarMensaje(2, RJ)
+    repetir 2
+      derecha
+    mover
+    tamaño:= 2
+    repetir 4
+      repetir tamaño
+        juntarP(p)
+        mover
+      repetir 3        
+        derecha
+      repetir tamaño
+        juntarP(p)
+        mover
+        derecha
+      tamaño:= tamaño + 1
+    Informar(p)
+  fin
+  robot jefesito
+  variables
+    id: numero
+  comenzar
+    RecibirMensaje(id, *)
+    Informar(id)
+  fin
+variables
+  R1: florero
+  R2: papelero
+  RJ: jefesito
+comenzar
+  AsignarArea(R1, A1)
+  AsignarArea(R1, AC)
+  AsignarArea(R2, A2)
+  AsignarArea(R2, AC)
+  AsignarArea(RJ, AJ)
+  Iniciar(R1, 1,1)
+  Iniciar(R2, 31,1)
+  Iniciar(RJ, 15,1)
+fin
+{
+Realice un programa en el cual 2 robots corren una carrera. El recorrido realizado por
+cada uno es el que se muestra en la siguiente figura. Durante el recorrido el robot 1 debe
+juntar todas las flores que encuentre en los vértices de cada escalón, mientras que el robot
+2 debe juntar todos los papeles que encuentre en los vértices de cada escalón.
+Al finalizar deben informar la cantidad de elementos recogidos.
+El robot 1 debe iniciar su recorrido en la esquina (1,1) y el robot 2 debe iniciar su recorrido
+en la esquina (31,1).
+Al finalizar la carrera, un robot jefe (inicializado en la esquina (15,1) ) debe informar qué
+robot llegó primero a la esquina central de su recorrido.
+}
+
+
+

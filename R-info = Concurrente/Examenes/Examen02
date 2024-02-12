@@ -1,0 +1,198 @@
+programa ex2
+procesos
+  proceso juntarF
+  comenzar
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso juntarP
+  comenzar
+    si (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso bloqueo (E fop: numero)
+  variables
+    av, ca: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    BloquearEsquina(15,15)
+    Pos(15,15)
+    si (fop = 1)
+      juntarF
+    sino
+      juntarP
+    Pos(av,ca)
+    LiberarEsquina(15,15)
+  fin
+areas
+  aC1: AreaPC(5,4,5,4)
+  aC2: AreaPC(11,4,11,4)
+  aH1: AreaP(6,4,9,4)
+  aH2: AreaP(12,4,15,4)
+  aV1: AreaP(5,5,5,16)
+  aV2: AreaP(11,5,11,16)
+  aI: AreaPC(50,50,53,53)
+  aJ: AreaP(1,1,1,1)
+  aFYP: AreaPC(15,15,15,15)
+robots
+  robot jefesito
+  variables
+    id, id1, id2, id3: numero
+    gano: boolean
+  comenzar
+    id1:= 0
+    id2:= 0
+    id3:= 0
+    gano:= F
+    EnviarMensaje(1, A1)
+    EnviarMensaje(2, A2)
+    EnviarMensaje(3, B1)
+    EnviarMensaje(4, B2)
+    mientras (gano <> V)
+      RecibirMensaje(id, *)
+      si (id1 = 0)
+        id1:= id
+      sino
+        si (id2 = 0)
+          id2:= id
+          si ((id1 = 1) & (id2 = 2))
+            gano:= V
+            ganador:= 1
+          si ((id1 = 2) & (id2 = 1))
+            gano:= V
+            ganador:= 1
+          si ((id1 = 3) & (id2 = 4))  
+            gano:= V
+            ganador:= 2
+          si ((id1 = 4) & (id2 = 3))
+            gano:= V
+            ganador:= 2
+        sino
+          id3:= id
+          si ((id3 = 1) | (id3 = 2))
+            gano:= V
+            ganador:= 1
+          sino
+            gano:= V
+            ganador:= 2
+    Informar(ganador)
+  fin
+
+  robot horizontal
+  variables
+    id, fop, avI, caI: numero
+  comenzar
+    fop:= 1
+    avI:= PosAv
+    caI:= PosCa
+    RecibirMensaje(id, RJ)
+    si (caI = 50)
+      Pos(9,4)
+    sino
+      Pos(15,4)
+    repetir 3 
+      derecha
+    repetir 3
+      bloqueo(fop)
+      depositarFlor
+      mover
+    bloqueo(fop)
+    depositarFlor
+    si(PosAv = 6)
+      BloquearEsquina(5,4)
+      mover
+      bloqueo(fop)
+      depositarFlor
+      LiberarEsquina(5,4)
+    sino
+      BloquearEsquina(11,4)
+      mover
+      bloqueo(fop)
+      depositarFlor
+      Pos(avI, caI)
+      LiberarEsquina(11,4)
+    EnviarMensaje(id, RJ)
+  fin
+
+  robot vertical
+  variables
+    id, fop, avI, caI: numero
+  comenzar
+    fop:= 2
+    avI:= PosAv
+    caI:= PosCa
+    RecibirMensaje(id, RJ)
+    si (caI = 51)
+      BloquearEsquina(5,4)
+      Pos(5,4)
+      bloqueo(fop)
+      depositarPapel
+      mover
+      LiberarEsquina(5,4)
+    sino
+      BloquearEsquina(11,4)
+      Pos(11,4)
+      bloqueo(fop)
+      depositarPapel
+      mover
+      LiberarEsquina(11,4)
+    repetir 10
+      bloqueo(fop)
+      depositarPapel
+      mover
+    bloqueo(fop)
+    depositarPapel
+    Pos(avI, caI)
+    EnviarMensaje(id, RJ)
+  fin
+variables
+  RJ: jefesito
+  A1: horizontal 
+  A2: vertical
+  B1: horizontal
+  B2: vertical
+comenzar
+  AsignarArea(RJ, aJ)
+  AsignarArea(A1, aI)
+  AsignarArea(A1, aFYP)
+  AsignarArea(A1, aH1)
+  AsignarArea(A1, aC1)
+  AsignarArea(A2, aI)
+  AsignarArea(A2, aFYP)
+  AsignarArea(A2, aV1)
+  AsignarArea(A2, aC1)
+  AsignarArea(B1, aI)
+  AsignarArea(B1, aFYP)
+  AsignarArea(B1, aH1)
+  AsignarArea(B1, aC2)
+  AsignarArea(B2, aI)
+  AsignarArea(B2, aFYP)
+  AsignarArea(B2, aV2)
+  AsignarArea(B2, aC2)
+  Iniciar(RJ, 1,1)
+  Iniciar(A1, 50,50)
+  Iniciar(A2, 51,51)
+  Iniciar(B1, 52,52)
+  Iniciar(B2, 53,53)
+fin
+{
+ Existen dos equipos de dos rob0ts cada uno. Cada equipo debe formar con flores y papeles una letra L (4 de
+ancho y 12 de alto). La letra se forma con dos rob0ts, uno que realiza las lineas horizontales depositando
+una flor en cada esquina y otro que realiza la linea  vertical depositando un papel en cada esquina.
+ Luego existe un rob0t fiscalizador que determina que equipo termino primero su letra L e informa 1 o 2
+dependiendo el equipo ganador.
+ Notas:
+ El rob0t fiscalizador comienza en la esquina (1,1)
+ El rob0t 1 del equipo 1 comienza en la esquina (50,50)
+ El rob0t 2 del equipo 1 comienza en la esquina (51,51)
+ El rob0t 1 del equipo 2 comienza en la esquina (52,52)
+ El rob0t 2 del equipo 2 comienza en la esquina (53,53)
+ La letra L del primero equipo comienza en la esquina (5,4)
+ La letra L del segundo equipo comienza en la esquina (11,4)
+ La esquina (15,15) es la que contiene las flores y paspeles que los rob0ts deben juntar para formar su linea.
+ Estas flores/papeles deben tomarse de a una/o por cada rob0t.
+ Suponga que existe la cantidad de flores y papeles para formar la linea.
+ La letra L de cada equipo tendra algunas esquinas con una flor y un papel, y otras solo con una flor y otras solo con un papel.
+(imagen 2 chat juli)
+}

@@ -1,0 +1,133 @@
+programa Piva
+procesos
+  proceso entrar(E id:numero;ES f:numero; ES p:numero; E avini:numero; E caini:numero)
+  comenzar
+    BloquearEsquina(18,13)
+    Pos(18,13)
+    si(id = 1)
+      si(HayFlorEnLaEsquina)
+        tomarFlor
+        f:=f + 1
+    sino
+      si(HayPapelEnLaEsquina)
+        tomarPapel
+        p:=p + 1
+    Pos(avini,caini)
+    LiberarEsquina(18,13)
+  fin
+areas
+  area1:AreaPC(11,11,15,15)
+  area2:AreaPC(21,11,25,15)
+  area3:AreaPC(18,13,18,13)
+  areap1:AreaP(2,2,2,2)
+  areap2:AreaP(3,3,3,3)
+  areap3:AreaP(1,1,1,1)
+robots
+  robot florero
+  variables
+    id,f,p,avini,caini,av,ca:numero
+    termino:boolean
+  comenzar
+    f:=0
+    p:=0
+    termino:= F
+    RecibirMensaje(id,r3)
+    repetir 5
+      avini:=PosAv
+      caini:=PosCa
+      entrar(id,f,p,avini,caini)
+      Random(av,11,15)
+      Random(ca,11,15)
+      Pos(av,ca)
+      si(f > 0)
+        depositarFlor
+        f:=f - 1
+      Pos(avini,caini)
+    EnviarMensaje(V,r3)
+    mientras (termino = F)
+      RecibirMensaje(termino,r3)  
+      Random(av,21,25)
+      Random(ca,11,15)
+      Pos(av,ca)
+      si(HayPapelEnLaEsquina)
+        tomarPapel
+        termino:=V
+      sino
+        termino:= F
+      si( termino = V)
+        EnviarMensaje(termino,r3)
+        EnviarMensaje(id,r3)
+  fin
+  robot papelero
+  variables
+    id,f,p,avini,caini,av,ca:numero
+    termino:boolean
+  comenzar
+    f:=0
+    p:=0
+    termino:=F
+    RecibirMensaje(id,r3)
+    repetir 5
+      avini:=PosAv
+      caini:=PosCa
+      entrar(id,f,p,avini,caini)
+      Random(av,21,25)
+      Random(ca,21,25)
+      Pos(av,ca)
+      si(p > 0)
+        depositarPapel
+        p:=p - 1
+      Pos(avini,caini)
+    EnviarMensaje(V,r3)
+    mientras(termino = F)
+      RecibirMensaje(termino,r3)
+      Random(av,11,15)
+      Random(ca,11,15)
+      Pos(av,ca)
+      si(HayFlorEnLaEsquina)
+        tomarPapel
+        termino:=V
+      sino
+        termino:=F
+      si(termino = V)
+        EnviarMensaje(termino,r3)
+        EnviarMensaje(id,r3)
+  fin
+  robot jefe
+  variables
+    id,xid:numero
+    termino:boolean
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2) 
+    EnviarMensaje(F,r1)
+    EnviarMensaje(F,r2)
+    repetir 2
+      RecibirMensaje(termino,*)
+      RecibirMensaje(id,*)
+      si (xid=0)
+        xid:= id
+        si(xid = 1)
+          EnviarMensaje(V,r2)
+        sino
+          EnviarMensaje(V,r1)
+    Informar(xid)
+  fin
+variables
+  r1:florero
+  r2:papelero
+  r3:jefe
+comenzar
+  AsignarArea(r1,areap1)
+  AsignarArea(r1,area1)
+  AsignarArea(r1,area2)
+  AsignarArea(r1,area3)
+  AsignarArea(r2,areap2)
+  AsignarArea(r2,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(r2,area3)
+  AsignarArea(r3,areap3)
+  Iniciar(r1,2,2)
+  Iniciar(r2,3,3)
+  Iniciar(r3,1,1)
+fin

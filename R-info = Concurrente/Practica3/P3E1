@@ -1,0 +1,108 @@
+programa P3E1
+procesos
+  proceso juntarFlores (ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso juntarPapeles (ES papeles: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+  proceso depositarF (ES flores: numero)
+  comenzar
+    repetir flores
+      depositarFlor
+      flores:= flores - 1
+  fin
+  proceso depositarP (ES papeles: numero)
+  comenzar
+    repetir papeles
+      depositarPapel
+      papeles:= papeles - 1
+  fin
+areas
+  areaF: AreaPC(1, 1, 5, 10)
+  areaP: AreaPC(6, 1, 10, 9)
+  areaI: AreaC(6, 10, 10, 10)
+robots
+  robot florero
+  variables
+    flores, av, ca, avAux, caAux: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    flores:= 0
+    repetir 5
+      Random (avAux, 1, 2)
+      Random (caAux, 1, 3)
+      BloquearEsquina (avAux, caAux)
+      Pos (avAux, caAux)
+      juntarFlores(flores)
+      Pos (av, ca)
+      LiberarEsquina (avAux, caAux) 
+    BloquearEsquina (10, 10)
+    Pos (10, 10)
+    depositarF (flores)
+    Pos (av, ca)
+    LiberarEsquina (10, 10)
+  fin
+
+  robot papelero
+  variables
+    papeles, av, ca, avAux, caAux: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    papeles:= 0
+    repetir 3
+      Random (avAux, 6, 10)
+      Random (caAux, 1, 9)
+      BloquearEsquina (avAux, caAux)
+      Pos (avAux, caAux)
+      juntarPapeles(papeles)
+      Pos (av, ca)
+      LiberarEsquina (avAux, caAux)
+    BloquearEsquina (10, 10)
+    Pos (10, 10)
+    depositarP (papeles)
+    Pos (av, ca)
+    LiberarEsquina (10, 10)
+  fin
+  
+variables
+  f1, f2: florero
+  p1, p2: papelero
+comenzar
+  AsignarArea(f1, areaI)
+  AsignarArea(f2, areaI)
+  AsignarArea(p1, areaI)
+  AsignarArea(p2, areaI)
+  AsignarArea(f1, areaF)
+  AsignarArea(f2, areaF)
+  AsignarArea(p1, areaP)
+  AsignarArea(p2, areaP)
+  Iniciar(f1, 6, 10)
+  Iniciar(f2, 7, 10)
+  Iniciar(p1, 8, 10)
+  Iniciar(p2, 9, 10)
+fin
+
+{ Realice un programa con 2 robots recolectores de flores (floreros) y 2 robots recolectores
+de papeles (papeleros).
+Los floreros comparten Ã¡rea y tienen 5 intentos cada uno para juntar las flores de una
+esquina, dentro de dicha Ã¡rea, elegida al azar en cada intento. Del mismo modo, los
+papeleros comparten Ã¡rea y tienen 3 intentos cada uno para juntar los papeles. En cada
+intento cada robot va a la esquina al azar, junta todos los elementos (flores o papeles segÃºn
+le corresponda) y vuelve a su esquina original. Al finalizar sus intentos cada robot debe
+acceder a la esquina (10, 10) y depositar los elementos recogidos de a uno.
+- Ã�rea de floreros: (1,1) a (5, 10)
+- Ã�rea de papeleros: (6, 1) a (10, 9)
+- Esquinas de inicio de floreros: (6,10) y (7,10)
+- Esquinas de inicio de papeleros: (8,10) y (9,10)
+
+}
+

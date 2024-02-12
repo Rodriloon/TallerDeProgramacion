@@ -1,0 +1,132 @@
+programa MartinezRodrigo
+procesos
+  proceso juntar
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+  fin
+  proceso cuadradoSup (E av: numero; E ca: numero)
+  comenzar
+    repetir 2
+      repetir 4
+        juntar
+        mover
+      juntar
+      derecha
+    repetir 3
+      juntar
+      mover
+    juntar
+    BloquearEsquina(av,ca)
+    mover
+    juntar
+    derecha
+    mover
+    LiberarEsquina(av,ca)
+    repetir 3
+      juntar
+      mover
+    juntar
+    derecha
+  fin
+  proceso cuadradoInf (E av: numero; E ca: numero)
+  comenzar
+    repetir 3
+      juntar
+      mover
+    juntar
+    BloquearEsquina(av,ca)
+    mover
+    juntar
+    derecha
+    mover
+    LiberarEsquina(av,ca)
+    repetir 3
+      juntar
+      mover
+    derecha
+    repetir 2
+      repetir 4
+        juntar
+        mover
+      juntar
+      derecha
+  fin
+areas
+  a1: AreaP(1,1,1,1)
+  a2: AreaP(2,2,2,2)
+  a3: AreaP(3,3,3,3)
+  ASup: AreaP(5,12,29,15)
+  ACen: AreaPC(5,11,33,11)
+  AInf: AreaP(9,7,33,10)
+robots
+  robot roboto
+  variables
+    avI, av,ca, id: numero
+    empezar: boolean
+  comenzar
+    avI:= PosAv
+    RecibirMensaje(id, RJ)
+    av:= 9
+    ca:= 11
+    si (avI = 2)
+      Pos(5,11)
+      cuadradoSup(av,ca)
+    sino
+      Pos(9,7)
+      cuadradoInf(av,ca)
+    EnviarMensaje(id, RJ)
+    RecibirMensaje(empezar, RJ)
+    av:= 19
+    si (avI = 2)
+      Pos(15,11)
+      cuadradoSup(av,ca)
+    si (avI = 3)
+      Pos(19,7)
+      cuadradoInf(av,ca)
+    EnviarMensaje(id,RJ)
+    RecibirMensaje(empezar, RJ)
+    av:= 29
+    si (avI = 2)
+      Pos(25,11)
+      cuadradoSup(av,ca)
+    si (avI = 3)
+      Pos(29,7)
+      cuadradoInf(av,ca)
+    EnviarMensaje(id,RJ)
+    RecibirMensaje(empezar, RJ)
+  fin
+  robot jefesito
+  variables
+    id: numero
+  comenzar
+    EnviarMensaje(1, R1)
+    EnviarMensaje(2, R2)
+    repetir 3
+      repetir 2
+        RecibirMensaje(id, *)
+      si (id = 2)
+        Informar(1) {GANA 1 EN LA ETAPA ACTUAL}
+      sino
+        Informar(2) {GANA 2 EN LA ETAPA ACTUAL}
+      EnviarMensaje(V, R2)
+      EnviarMensaje(V, R1)
+  fin
+variables
+  R1: roboto 
+  R2: roboto
+  RJ: jefesito
+comenzar
+  AsignarArea(R1, a2)
+  AsignarArea(R2, a3)
+  AsignarArea(RJ, a1)
+  AsignarArea(R1, ASup)
+  AsignarArea(R1, ACen)
+  AsignarArea(R2, AInf)
+  AsignarArea(R2, ACen)
+  Iniciar(R1, 2,2)
+  Iniciar(R2, 3,3)
+  Iniciar(RJ, 1,1)
+fin

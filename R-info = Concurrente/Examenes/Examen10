@@ -1,0 +1,32 @@
+programa ex10
+procesos
+
+areas
+
+robots
+
+variables
+
+comenzar
+  AsignarArea()
+  Iniciar()
+fin
+{
+Dos robots recolectores deben recorrer el perimetro, un cuadrado de lado 15 recolectando todos los papeles a su camino. Cada vez que completan un lado deberan depositar todo lo recolectado en la esquina (50,50) y luego continuar con el sig lado del cuadrado 
+Existe un robot acumulador, que debera tomar los papeles de la esquina (50,50) cada vez que alguno de los recolectores deja papeles alli
+Una vez que los recolectores completan sus cuadrados, el robot acumulador debera informar que robot junto mas papeles 
+Los robots recolectores inician en la esquina (1,1) y (30,1), el robot acumulador en la esquina (100,100)
+
+Parcial Juli Recuperatorio 
+
+Tres robots corredores tienen 5 intentos para avanzar por sus av. En cada intento deberan recolectar una cantidad aleatorio de flores (entre 4 y 8) de la esquina (50,50) y avanzar dicha cantidad de pasos por su av. Asuma que en la esquina (50,50) posee la cant de flores suficientes 
+Al finalizar el recorrido, el robot fiscalizador debera informar que robot llego mas lejos y la cantidadd de flores que quedaron en la esquina (50,50)
+Los robots corredores inician en las esquinas (1,1), (2,1), (3,1), el robot fiscalizador en (4,1)
+
+Parcial Concurrente Juli 
+
+2 robots recorren las avenidas 5 y 7,cada 4 esquinas o cada 12 papeles que juntan deberan vaciar todo en la esquina (10,10) una vez que depositan deberan avisar al robot recolector y este debera juntar lo que dejo cada robot
+El robot recolector informa quien junto menos papeles 
+A lo sumo hay un papel en cada esquina 
+}
+

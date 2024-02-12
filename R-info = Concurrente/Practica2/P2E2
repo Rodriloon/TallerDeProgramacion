@@ -1,0 +1,88 @@
+programa P2E2
+procesos
+  proceso tomarF(ES f: numero; ES p: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  proceso escalon(E alto: numero; ES f: numero; ES p: numero)
+  comenzar
+    repetir alto
+      tomarF(f, p)
+      mover
+    tomarF(f, p)
+    derecha
+    mover
+    tomarF(f, p)
+  fin
+  proceso recorrido (ES fyp: numero)
+  variables
+    f, p, ancho, alto: numero
+  comenzar
+    f:= 0
+    p:= 0
+    ancho:= 1
+    repetir 4
+      Random(alto, 1, 5)
+      escalon(alto, f, p)
+      si (f > p)
+        fyp:= fyp + 1
+      repetir 3
+        derecha
+  fin
+  
+areas
+  AJ: AreaP(1,1,1,1)
+  AR: AreaPC(2,1,100,100)
+robots
+  robot roboto
+  variables
+    fyp: numero
+  comenzar
+    fyp:= 0
+    recorrido(fyp)
+    EnviarMensaje(fyp, RJ)
+  fin
+  robot jefesito
+  variables
+    tot, fyp: numero
+  comenzar
+    tot:= 0
+    repetir 3
+      RecibirMensaje(fyp, *)
+      tot:= tot + fyp
+    Informar(tot) 
+  fin
+  
+variables
+  RJ: jefesito
+  R1: roboto
+  R2: roboto
+  R3: roboto
+comenzar
+  AsignarArea(RJ, AJ)
+  AsignarArea(R1, AR)
+  AsignarArea(R2, AR)
+  AsignarArea(R3, AR)
+  Iniciar(RJ, 1,1)
+  Iniciar(R1, 2,1)
+  Iniciar(R2, 7,1)
+  Iniciar(R3, 12,1)
+fin
+{
+Realice un pr0grama en el que 3 rob0ts realizan una escalera de 4 escalones cada
+uno. Todos los escalones tienen un ancho fijo de 1, y un alto aleatorio entre 1 y 5. Al
+finalizar el recorrido, cada rob0t debera enviar al rob0t jefe la cantidad de escalones
+que tenian mas flores que papeles. Una vez que los tres rob0ts finalizaron, el rob0t
+jefe debera informar la suma de las cantidades enviadas por los 3 rob0ts.
+- El rob0t jefe inicia en la esquina (1,1)
+- El rob0t 1 inicia en la esquina (2,1)
+- El rob0t 2 inicia en la esquina (7,1)
+- El rob0t 3 inicia en la esquina (12,1)
+}
+
+
